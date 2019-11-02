@@ -1,0 +1,14 @@
+FROM golang:alpine as build
+
+WORKDIR /app
+COPY . .
+RUN CGO_ENABLED=0 GOOS=linux go build -o app
+
+FROM scratch
+
+COPY --from=build /app /app
+WORKDIR /app
+
+ENV TZ=Europe/Moscow
+
+CMD ["./app"]
